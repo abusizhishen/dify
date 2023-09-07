@@ -21,8 +21,8 @@ else if (
 }
 else {
   if (isDevelopment) {
-    apiPrefix = 'https://cloud.dify.dev/console/api'
-    publicApiPrefix = 'https://dev.udify.app/api'
+    apiPrefix = 'https://dify.oopendoor.com/console/api'
+    publicApiPrefix = 'https://dify.oopendoor.com/api'
   }
   else {
     // const domainParts = globalThis.location?.host?.split('.');

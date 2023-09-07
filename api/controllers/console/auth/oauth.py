@@ -1,7 +1,7 @@
 import logging
 from datetime import datetime
 from typing import Optional
-
+import os
 import flask_login
 import requests
 from flask import request, redirect, current_app, session
@@ -16,16 +16,16 @@ from .. import api
 
 def get_oauth_providers():
     with current_app.app_context():
-        github_oauth = GitHubOAuth(client_id=current_app.config.get('GITHUB_CLIENT_ID'),
-                                   client_secret=current_app.config.get(
+        github_oauth = GitHubOAuth(client_id=os.environ.get('GITHUB_CLIENT_ID'),
+                                   client_secret=os.environ.get(
                                        'GITHUB_CLIENT_SECRET'),
-                                   redirect_uri=current_app.config.get(
+                                   redirect_uri=os.environ.get(
                                        'CONSOLE_API_URL') + '/console/api/oauth/authorize/github')
 
-        google_oauth = GoogleOAuth(client_id=current_app.config.get('GOOGLE_CLIENT_ID'),
-                                   client_secret=current_app.config.get(
+        google_oauth = GoogleOAuth(client_id=os.environ.get('GOOGLE_CLIENT_ID'),
+                                   client_secret=os.environ.get(
                                        'GOOGLE_CLIENT_SECRET'),
-                                   redirect_uri=current_app.config.get(
+                                   redirect_uri=os.environ.get(
                                        'CONSOLE_API_URL') + '/console/api/oauth/authorize/google')
 
         OAUTH_PROVIDERS = {
@@ -80,7 +80,7 @@ class OAuthCallback(Resource):
         flask_login.login_user(account, remember=True)
         AccountService.update_last_login(account, request)
 
-        return redirect(f'{current_app.config.get("CONSOLE_WEB_URL")}?oauth_login=success')
+        return redirect(f'{os.environ.get("CONSOLE_WEB_URL")}?oauth_login=success')
 
 
 def _get_account_by_openid_or_email(provider: str, user_info: OAuthUserInfo) -> Optional[Account]:
